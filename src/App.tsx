@@ -1,12 +1,12 @@
-import './App.css'
+import { Header } from "./components/Header/header";
+import "./scss/app.scss";
 
 function App() {
-
   return (
-    <>
-      Pizza
-    </>
-  )
+    <div className="wrapper">
+      <Header />
+    </div>
+  );
 }
 
-export default App
+export default App;
