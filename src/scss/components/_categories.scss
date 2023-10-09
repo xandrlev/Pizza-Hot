@@ -1,9 +1,21 @@
-@import '../variables';
+@import "../variables";
 
 .categories {
   ul {
     display: flex;
-    flex-wrap: wrap ;
+
+    @media (max-width: 1080px) {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      grid-template-rows: repeat(2, 1fr);
+      grid-column-gap: 5px;
+      grid-row-gap: 5px;
+      text-align: center;
+    }
+
+    @media (max-width: 500px) {
+      grid-template-columns: repeat(2, 1fr);
+    }
 
     li {
       background-color: #f9f9f9;
