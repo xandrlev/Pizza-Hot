@@ -1,8 +1,9 @@
 import { Link } from "react-router-dom";
 import logo from "../../assets/image/logo.png";
 import { LuShoppingCart } from "react-icons/lu";
+import { Search, SearchProps } from "../Search/Search";
 
-export const Header = () => {
+export const Header = ({ searchValue, setSearchValue }: SearchProps) => {
   return (
     <header className="header">
       <div className="container">
@@ -13,13 +14,12 @@ export const Header = () => {
             <p>delicious pizza</p>
           </div>
         </Link>
+        <Search searchValue={searchValue} setSearchValue={setSearchValue} />
         <div className="header__cart">
           <Link to="/cart" className="button button--cart">
             <span>12 $</span>
             <div className="button__delimiter"></div>
-
             <LuShoppingCart />
-
             <span>3</span>
           </Link>
         </div>

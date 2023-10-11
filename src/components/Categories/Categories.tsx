@@ -1,8 +1,12 @@
-import { useState } from "react";
+interface CategoriesProps {
+  categoryId: number;
+  onClickCategory: (id: number) => void;
+}
 
-export const Categories = () => {
-  const [selected, setSelected] = useState(0);
-
+export const Categories = ({
+  onClickCategory,
+  categoryId,
+}: CategoriesProps) => {
   const categories = ["All", "Meat", "Vegetarian", "BBQ", "Spicy", "Сheese"];
 
   return (
@@ -10,9 +14,9 @@ export const Categories = () => {
       <ul>
         {categories.map((item, index) => (
           <li
-            onClick={() => setSelected(index)}
+            onClick={() => onClickCategory(index)}
             key={index}
-            className={selected === index ? "active" : ""}
+            className={categoryId === index ? "active" : ""}
           >
             {item}
           </li>

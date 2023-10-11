@@ -1,0 +1,33 @@
+.container {
+  position: relative;
+  color: #8a8989;
+  font-size: 20px;
+
+  .icon {
+    position: absolute;
+    left: 18px;
+    top: 23px;
+    opacity: 0.5;
+  }
+
+  .input {
+    width: 30vw;
+    margin: 10px;
+    padding: 12px 18px 12px 32px;
+    border-radius: 5px;
+    border: 1px solid #cccccc;
+    transition: all 0.2s ease-in-out;
+
+    &:focus {
+      border: 1px solid #8a8989;
+    }
+  }
+
+  .iconClose {
+    position: absolute;
+    right: 18px;
+    top: 23px;
+    opacity: 0.5;
+    cursor: pointer;
+  }
+}

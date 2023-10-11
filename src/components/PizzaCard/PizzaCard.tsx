@@ -22,7 +22,7 @@ export const PizzaCard = ({
   sizes,
   types,
 }: IPropsPizzaCard) => {
-  const typesName = ["slim", "default"];
+  const typesName = ["thin", "default"];
   const [activeType, setActiveType] = useState(0);
   const [activeSize, setActiveSize] = useState(0);
 

@@ -1,43 +1,54 @@
 import { useState } from "react";
 import { AiFillCaretDown, AiFillCaretUp } from "react-icons/ai";
 
-export const Sort = () => {
-  const menu = ["popularity", "price", "alphabetizing"];
+export interface SortItem {
+  name: string;
+  sort: string;
+}
+
+interface SortProps {
+  sortValue: SortItem;
+  onClickSort: (sort: SortItem) => void;
+}
+
+export const Sort = ({ sortValue, onClickSort }: SortProps) => {
+  const menu = [
+    { name: "popularity", sort: "rating" },
+    { name: "price", sort: "price" },
+    { name: "alphabetizing", sort: "title" },
+  ];
+
   const [isVisible, setIsVisible] = useState(false);
-  const [selectedMenu, setSelectedMenu] = useState(0);
 
   // const keyEvent = (event: React.KeyboardEvent) => {
   //   if(event.key === 'Esc') console.log(12);
   //   ;
   // }
 
-  const handleSelectMenu = (index: number) => {
-    setSelectedMenu(index);
+  const handleSelectMenu = (sort: SortItem) => {
+    onClickSort(sort);
     setIsVisible(false);
   };
-  
 
   return (
     <div className="sort">
       <div className="sort__label">
         {isVisible ? <AiFillCaretDown /> : <AiFillCaretUp />}
         <b>Sorting by:</b>
-        <span onClick={() => setIsVisible(!isVisible)}>
-          {menu[selectedMenu]}
-        </span>
+        <span onClick={() => setIsVisible(!isVisible)}>{sortValue.name}</span>
       </div>
 
       {isVisible && (
         <div className="sort__popup">
           <ul>
-            {menu.map((item, index) => (
+            {menu.map((item) => (
               <li
-                key={index}
-                onClick={() => handleSelectMenu(index)}
+                key={item.name}
+                onClick={() => handleSelectMenu(item)}
                 // onKeyDown={keyEvent}
-                className={selectedMenu === index ? "active" : ""}
+                className={sortValue.sort === item.sort ? "active" : ""}
               >
-                {item}
+                {item.name}
               </li>
             ))}
           </ul>
