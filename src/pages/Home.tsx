@@ -3,8 +3,9 @@ import { Categories } from "../components/Categories/Categories";
 import { IPropsPizzaCard, PizzaCard } from "../components/PizzaCard/PizzaCard";
 import { Sort, SortItem } from "../components/Sort/Sort";
 import { PizzaSkeleton } from "../components/PizzaCard/PizzaSkeleton";
+import { Pagination } from "../components/Pagination/Pagination";
 
-interface HomeProps {
+export interface HomeProps {
   searchValue: string;
 }
 
@@ -14,6 +15,7 @@ export const Home = ({ searchValue }: HomeProps) => {
   const [pizzas, setPizzas] = useState<IPropsPizzaCard[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [categoryId, setCategoryId] = useState(0);
+  const [currentPage, setCurrentPage] = useState(1);
   const [sortValue, setSortValue] = useState({
     name: "popularity",
     sort: "rating",
@@ -22,17 +24,16 @@ export const Home = ({ searchValue }: HomeProps) => {
   useEffect(() => {
     setIsLoading(true);
     fetch(
-      `${BASE_URL}?${categoryId > 0 ? `category=${categoryId}` : ""}&sortBy=${
-        sortValue.sort
-      }`
+      `${BASE_URL}?page=${currentPage}&limit=4&${
+        categoryId > 0 ? `category=${categoryId}` : ""
+      }&sortBy=${sortValue.sort}`
     )
       .then((res) => res.json())
       .then((arr) => {
         setPizzas(arr);
         setIsLoading(false);
-        // window.scrollTo(0, 0);
       });
-  }, [categoryId, sortValue]);
+  }, [categoryId, sortValue, currentPage]);
 
   const onClickCategory = (id: number) => {
     setCategoryId(id);
@@ -40,6 +41,10 @@ export const Home = ({ searchValue }: HomeProps) => {
 
   const onClickSort = (sort: SortItem) => {
     setSortValue(sort);
+  };
+
+  const onChangeCurrentPage = (page: number) => {
+    setCurrentPage(page);
   };
 
   return (
@@ -55,9 +60,10 @@ export const Home = ({ searchValue }: HomeProps) => {
           : pizzas
               .filter((item) =>
                 item.title.toLowerCase().includes(searchValue.toLowerCase())
-              ) //search pizza from input
+              ) //local search pizza from input
               .map((pizza) => <PizzaCard key={pizza.id} {...pizza} />)}
       </div>
+      <Pagination onChangeCurrentPage={onChangeCurrentPage} />
     </>
   );
 };

@@ -1,4 +1,3 @@
-import { Link } from "react-router-dom";
 import { NotFoundComp } from "../components/NotFound/NotFoundComp";
 
 export const NotFound = () => {

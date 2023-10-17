@@ -13,12 +13,9 @@ export interface IPropsPizzaCard {
 }
 
 export const PizzaCard = ({
-  id,
   title,
   imageUrl,
-  category,
   price,
-  rating,
   sizes,
   types,
 }: IPropsPizzaCard) => {
@@ -58,9 +55,9 @@ export const PizzaCard = ({
         <div className="pizza-block__bottom">
           <div className="pizza-block__price">{price}$</div>
           <div className="button button--outline button--add">
-            <FaPlus className="button--plus"/>
+            <FaPlus className="button--plus" />
             <span>Add</span>
-            <i>2</i>
+            <i>0</i>
           </div>
         </div>
       </div>

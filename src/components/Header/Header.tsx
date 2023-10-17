@@ -17,10 +17,10 @@ export const Header = ({ searchValue, setSearchValue }: SearchProps) => {
         <Search searchValue={searchValue} setSearchValue={setSearchValue} />
         <div className="header__cart">
           <Link to="/cart" className="button button--cart">
-            <span>12 $</span>
+            <span>15 $</span>
             <div className="button__delimiter"></div>
             <LuShoppingCart />
-            <span>3</span>
+            <span>1</span>
           </Link>
         </div>
       </div>

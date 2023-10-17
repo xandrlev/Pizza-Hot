@@ -23,10 +23,10 @@ export const Cart = () => {
         <div className="cart__bottom">
           <div className="cart__bottom-details">
             <span>
-              Total pizzas: <b>3 pieces</b>
+              Total pizzas: <b>1 pieces</b>
             </span>
             <span>
-              Total: <b>50 $</b>
+              Total: <b>15 $</b>
             </span>
           </div>
           <div className="cart__bottom-buttons">
