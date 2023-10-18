@@ -9,8 +9,10 @@
     align-items: center;
     justify-content: space-between;
 
-    @media (max-width: 510px) {
+    @media (max-width: 770px) {
+      width: 100%;
       flex-wrap: wrap;
+      flex-direction: column;
       justify-content: center;
     }
   }

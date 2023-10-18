@@ -6,7 +6,7 @@ export interface SortItem {
   sort: string;
 }
 
-interface SortProps {
+export interface SortProps {
   sortValue: SortItem;
   onClickSort: (sort: SortItem) => void;
 }
@@ -19,11 +19,6 @@ export const Sort = ({ sortValue, onClickSort }: SortProps) => {
   ];
 
   const [isVisible, setIsVisible] = useState(false);
-
-  // const keyEvent = (event: React.KeyboardEvent) => {
-  //   if(event.key === 'Esc') console.log(12);
-  //   ;
-  // }
 
   const handleSelectMenu = (sort: SortItem) => {
     onClickSort(sort);
@@ -45,7 +40,6 @@ export const Sort = ({ sortValue, onClickSort }: SortProps) => {
               <li
                 key={item.name}
                 onClick={() => handleSelectMenu(item)}
-                // onKeyDown={keyEvent}
                 className={sortValue.sort === item.sort ? "active" : ""}
               >
                 {item.name}

@@ -4,6 +4,10 @@ import { IPropsPizzaCard, PizzaCard } from "../components/PizzaCard/PizzaCard";
 import { Sort, SortItem } from "../components/Sort/Sort";
 import { PizzaSkeleton } from "../components/PizzaCard/PizzaSkeleton";
 import { Pagination } from "../components/Pagination/Pagination";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../store/store";
+import { categoriesFilter, categoriesSort } from "../store/slices/filterSlice";
+import axios from "axios";
 
 export interface HomeProps {
   searchValue: string;
@@ -14,33 +18,35 @@ export const Home = ({ searchValue }: HomeProps) => {
 
   const [pizzas, setPizzas] = useState<IPropsPizzaCard[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [categoryId, setCategoryId] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
-  const [sortValue, setSortValue] = useState({
-    name: "popularity",
-    sort: "rating",
-  });
+
+  const {
+    categories: { categoriesName, categoryId },
+    sort,
+  } = useSelector((state: RootState) => state.filter);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     setIsLoading(true);
-    fetch(
-      `${BASE_URL}?page=${currentPage}&limit=4&${
-        categoryId > 0 ? `category=${categoryId}` : ""
-      }&sortBy=${sortValue.sort}`
-    )
-      .then((res) => res.json())
-      .then((arr) => {
-        setPizzas(arr);
+
+    axios
+      .get(
+        `${BASE_URL}?page=${currentPage}&limit=4&${
+          categoryId > 0 ? `category=${categoryId}` : ""
+        }&sortBy=${sort.sort}`
+      )
+      .then((res) => {
+        setPizzas(res.data);
         setIsLoading(false);
       });
-  }, [categoryId, sortValue, currentPage]);
+  }, [categoryId, sort, currentPage]);
 
-  const onClickCategory = (id: number) => {
-    setCategoryId(id);
+  const onClickCategories = (id: number) => {
+    dispatch(categoriesFilter(id));
   };
 
   const onClickSort = (sort: SortItem) => {
-    setSortValue(sort);
+    dispatch(categoriesSort(sort));
   };
 
   const onChangeCurrentPage = (page: number) => {
@@ -50,18 +56,31 @@ export const Home = ({ searchValue }: HomeProps) => {
   return (
     <>
       <div className="content__top">
-        <Categories categoryId={categoryId} onClickCategory={onClickCategory} />
-        <Sort sortValue={sortValue} onClickSort={onClickSort} />
+        <Categories
+          categoryId={categoryId}
+          categoriesName={categoriesName}
+          onClickCategories={onClickCategories}
+        />
+        <Sort sortValue={sort} onClickSort={onClickSort} />
       </div>
       <h2 className="content__title">All pizzas</h2>
       <div className="content__items">
-        {isLoading
+        {/* {isLoading
           ? pizzas.map((_, i) => <PizzaSkeleton key={i} />)
           : pizzas
               .filter((item) =>
                 item.title.toLowerCase().includes(searchValue.toLowerCase())
               ) //local search pizza from input
-              .map((pizza) => <PizzaCard key={pizza.id} {...pizza} />)}
+              .map((pizza) => <PizzaCard key={pizza.id} {...pizza} />)} */}
+        {isLoading
+          ? pizzas.map((_, i) => <PizzaSkeleton key={i} />)
+          : pizzas.flatMap((item) =>
+              item.title.toLowerCase().includes(searchValue.toLowerCase()) ? (
+                <PizzaCard key={item.id} {...item} />
+              ) : (
+                []
+              )
+            )}
       </div>
       <Pagination onChangeCurrentPage={onChangeCurrentPage} />
     </>

@@ -1,20 +1,20 @@
-interface CategoriesProps {
+interface ICategoriesProps {
   categoryId: number;
-  onClickCategory: (id: number) => void;
+  categoriesName: string[];
+  onClickCategories: (index: number) => void;
 }
 
 export const Categories = ({
-  onClickCategory,
   categoryId,
-}: CategoriesProps) => {
-  const categories = ["All", "Meat", "Vegetarian", "BBQ", "Spicy", "Сheese"];
-
+  categoriesName,
+  onClickCategories,
+}: ICategoriesProps) => {
   return (
     <div className="categories">
       <ul>
-        {categories.map((item, index) => (
+        {categoriesName.map((item, index) => (
           <li
-            onClick={() => onClickCategory(index)}
+            onClick={() => onClickCategories(index)}
             key={index}
             className={categoryId === index ? "active" : ""}
           >

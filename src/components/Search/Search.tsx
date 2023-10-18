@@ -1,18 +1,16 @@
+import { useContext } from "react";
 import { HiSearch, HiX } from "react-icons/hi";
+import { SearchContext } from "../../App";
 import styles from "./Search.module.scss";
 
-export interface SearchProps {
-  searchValue: string;
-  setSearchValue: React.Dispatch<React.SetStateAction<string>>;
-}
-
-export const Search = ({ searchValue, setSearchValue }: SearchProps) => {
+export const Search = () => {
+  const {searchValue, setSearchValue } = useContext(SearchContext);
   const onSearch = ({ currentTarget }: React.FormEvent<HTMLInputElement>) => {
-    setSearchValue(currentTarget.value);
+    setSearchValue!(currentTarget.value);
   };
 
   const clearInput = () => {
-    setSearchValue("");
+    setSearchValue!("");
   };
 
   return (
