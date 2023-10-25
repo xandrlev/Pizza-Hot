@@ -2,20 +2,14 @@ import { useEffect, useRef, useState } from "react";
 import qs from "qs";
 import { useDebounce } from "../hooks/debounce";
 import { Categories } from "../components/Categories/Categories";
-import { IPropsPizzaCard, PizzaCard } from "../components/PizzaCard/PizzaCard";
+import { PizzaCard } from "../components/PizzaCard/PizzaCard";
 import { Sort, SortItem, menu } from "../components/Sort/Sort";
 import { PizzaSkeleton } from "../components/PizzaCard/PizzaSkeleton";
 import { Pagination } from "../components/Pagination/Pagination";
-import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../store/store";
-import {
-  categoriesFilter,
-  categoriesSort,
-  setCurrentPage,
-  setFilters,
-} from "../store/slices/filterSlice";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { useAppSelector } from "../hooks/useAppSelector";
+import { useActions } from "../hooks/useActions";
 
 export interface HomeProps {
   searchValue: string;
@@ -25,30 +19,41 @@ export const Home = ({ searchValue }: HomeProps) => {
   const BASE_URL = "https://651ec03244a3a8aa4768f0df.mockapi.io/pizzas";
 
   const debounceSearch = useDebounce(searchValue);
-  const [pizzas, setPizzas] = useState<IPropsPizzaCard[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const isSearch = useRef(false); //запрос по URL
   const isMounted = useRef(false); //проверка первого рендера один раз, а не два
   const navigate = useNavigate();
 
-  const dispatch = useDispatch();
-  const { categoriesName, categoryId, sort, currentPage } = useSelector(
-    (state: RootState) => state.filter
+  const {
+    loadPizza,
+    setFilters,
+    categoriesFilter,
+    categoriesSort,
+    setCurrentPage,
+  } = useActions();
+  const { categoriesName, categoryId, currentPage, sort } = useAppSelector(
+    (state) => state.filter
   );
+  const { pizzas } = useAppSelector((state) => state.pizza);
+
+  const fetchData = async () => {
+    try {
+      const { data } = await axios.get(
+        `${BASE_URL}?page=${currentPage}&limit=4&${
+          categoryId > 0 ? `category=${categoryId}` : ""
+        }&sortBy=${sort.sort}&search=${debounceSearch}`
+      );
+      loadPizza(data);
+      setIsLoading(false);
+    } catch (error: any) {
+      console.log(error);
+    }
+  };
 
   useEffect(() => {
     if (!isSearch.current) {
       setIsLoading(true);
-      axios
-        .get(
-          `${BASE_URL}?page=${currentPage}&limit=4&${
-            categoryId > 0 ? `category=${categoryId}` : ""
-          }&sortBy=${sort.sort}&search=${debounceSearch}`
-        )
-        .then((res) => {
-          setPizzas(res.data);
-          setIsLoading(false);
-        });
+      fetchData();
     }
     isSearch.current = false;
   }, [categoryId, sort.sort, currentPage, debounceSearch]);
@@ -59,12 +64,10 @@ export const Home = ({ searchValue }: HomeProps) => {
       const params = qs.parse(window.location.search.substring(1));
       const sort = menu.find((item) => item.sort === params.sort);
 
-      dispatch(
-        setFilters({
-          ...params,
-          sort,
-        })
-      );
+      setFilters({
+        ...params,
+        sort,
+      });
     }
     isSearch.current = true;
   }, []);
@@ -84,15 +87,15 @@ export const Home = ({ searchValue }: HomeProps) => {
   }, [categoryId, sort.sort, currentPage]);
 
   const onClickCategories = (id: number) => {
-    dispatch(categoriesFilter(id));
+    categoriesFilter(id);
   };
 
   const onClickSort = (sort: SortItem) => {
-    dispatch(categoriesSort(sort));
+    categoriesSort(sort);
   };
 
   const onChangeCurrentPage = (page: number) => {
-    dispatch(setCurrentPage(page));
+    setCurrentPage(page);
   };
 
   return (
