@@ -1,14 +1,13 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 
-const initialState = {
-  categories: {
-    categoryId: 0,
-    categoriesName: ["All", "Meat", "Vegetarian", "BBQ", "Spicy", "Сheese"],
-  },
+export const initialState = {
+  categoryId: 0,
+  categoriesName: ["All", "Meat", "Vegetarian", "BBQ", "Spicy", "Сheese"],
   sort: {
     name: "popularity",
     sort: "rating",
   },
+  currentPage: 1,
 };
 
 export const filterSlice = createSlice({
@@ -16,14 +15,23 @@ export const filterSlice = createSlice({
   initialState,
   reducers: {
     categoriesFilter: (state, { payload }: PayloadAction<number>) => {
-      state.categories.categoryId = payload;
+      state.categoryId = payload;
     },
     categoriesSort: (state, { payload }) => {
       state.sort = payload;
     },
+    setCurrentPage: (state, { payload }: PayloadAction<number>) => {
+      state.currentPage = payload;
+    },
+    setFilters: (state, { payload }) => {
+      state.categoryId = +payload.categoryId;
+      state.currentPage = +payload.currentPage;
+      state.sort = payload.sort;
+    },
   },
 });
 
-export const { categoriesFilter, categoriesSort } = filterSlice.actions;
+export const { categoriesFilter, categoriesSort, setCurrentPage, setFilters } =
+  filterSlice.actions;
 
 export default filterSlice.reducer;

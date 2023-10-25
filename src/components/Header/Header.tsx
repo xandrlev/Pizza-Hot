@@ -2,8 +2,10 @@ import { Link } from "react-router-dom";
 import logo from "../../assets/image/logo.png";
 import { LuShoppingCart } from "react-icons/lu";
 import { Search } from "../Search/Search";
+import { useAppSelector } from "../../hooks/useAppSelector";
 
 export const Header = () => {
+  const { itemsPizzas, totalPrice } = useAppSelector((state) => state.cart);
   return (
     <header className="header">
       <div className="container">
@@ -17,10 +19,10 @@ export const Header = () => {
         <Search />
         <div className="header__cart">
           <Link to="/cart" className="button button--cart">
-            <span>15 $</span>
+            <span>{totalPrice} $</span>
             <div className="button__delimiter"></div>
             <LuShoppingCart />
-            <span>1</span>
+            <span>{itemsPizzas.reduce((sum, cur) => sum + cur.count, 0)}</span>
           </Link>
         </div>
       </div>

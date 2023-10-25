@@ -4,7 +4,6 @@ export const NotFound = () => {
   return (
     <div>
       <NotFoundComp />
-      {/* <Link to="/">Back to home</Link> */}
     </div>
   );
 };

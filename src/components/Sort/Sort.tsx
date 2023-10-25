@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { AiFillCaretDown, AiFillCaretUp } from "react-icons/ai";
 
 export interface SortItem {
@@ -10,23 +10,45 @@ export interface SortProps {
   sortValue: SortItem;
   onClickSort: (sort: SortItem) => void;
 }
+export const menu = [
+  { name: "popularity", sort: "rating" },
+  { name: "price", sort: "price" },
+  { name: "alphabetizing", sort: "title" },
+];
 
 export const Sort = ({ sortValue, onClickSort }: SortProps) => {
-  const menu = [
-    { name: "popularity", sort: "rating" },
-    { name: "price", sort: "price" },
-    { name: "alphabetizing", sort: "title" },
-  ];
-
   const [isVisible, setIsVisible] = useState(false);
+  const sortRef = useRef<HTMLDivElement>(null!);
 
   const handleSelectMenu = (sort: SortItem) => {
     onClickSort(sort);
     setIsVisible(false);
   };
 
+  //* закрытие попапа по клику вне
+  useEffect(() => {
+    const handleClick = (e: MouseEvent) => {
+      if (!e.composedPath().includes(sortRef.current)) {
+        setIsVisible(false);
+      }
+    };
+    document.addEventListener("click", handleClick);
+    return () => document.removeEventListener("click", handleClick);
+  }, []);
+
+  //* закрытие попа по esc
+  useEffect(() => {
+    const closeByEsc = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        setIsVisible(false);
+      }
+    };
+    document.addEventListener("keyup", closeByEsc);
+    return () => document.removeEventListener("keyup", closeByEsc);
+  }, []);
+
   return (
-    <div className="sort">
+    <div ref={sortRef} className="sort">
       <div className="sort__label">
         {isVisible ? <AiFillCaretDown /> : <AiFillCaretUp />}
         <b>Sorting by:</b>
