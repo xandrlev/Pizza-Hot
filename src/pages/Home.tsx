@@ -10,6 +10,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useAppSelector } from "../hooks/useAppSelector";
 import { useActions } from "../hooks/useActions";
+import { fetchPizza } from "../store/slices/pizzaSlice";
 
 export interface HomeProps {
   searchValue: string;
@@ -38,6 +39,7 @@ export const Home = ({ searchValue }: HomeProps) => {
 
   const fetchData = async () => {
     try {
+      // fetchPizza(currentPage, categoryId, sort, debounceSearch);
       const { data } = await axios.get(
         `${BASE_URL}?page=${currentPage}&limit=4&${
           categoryId > 0 ? `category=${categoryId}` : ""
