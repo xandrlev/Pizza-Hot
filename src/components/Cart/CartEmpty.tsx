@@ -1,8 +1,9 @@
+import { FC } from "react";
 import { Link } from "react-router-dom";
 import styles from "./CartEmpty.module.scss";
 import empty from '../../assets/image/empty.png'
 
-export const CartEmpty = () => {
+export const CartEmpty: FC = () => {
   return (
     <div className={styles.container}>
       <div className={styles.empty}>

@@ -1,10 +1,12 @@
+import { FC } from "react";
 import { useState } from "react";
 import { FaPlus } from "react-icons/fa";
 import { useActions } from "../../hooks/useActions";
 import { useAppSelector } from "../../hooks/useAppSelector";
+import { Link } from "react-router-dom";
 
 export interface IPropsPizzaCard {
-  id: number;
+  id: string;
   title: string;
   imageUrl: string;
   category: number;
@@ -16,7 +18,7 @@ export interface IPropsPizzaCard {
 
 const typesName = ["thin", "default"];
 
-export const PizzaCard = (pizza: IPropsPizzaCard) => {
+export const PizzaCard: FC<IPropsPizzaCard> = (pizza) => {
   const { id, title, imageUrl, price, sizes, types } = pizza;
 
   const [activeType, setActiveType] = useState(0);
@@ -42,8 +44,10 @@ export const PizzaCard = (pizza: IPropsPizzaCard) => {
   return (
     <div className="pizza-bloc-wrapper">
       <div className="pizza-block">
-        <img className="pizza-block__image" src={imageUrl} alt="Pizza" />
-        <h4 className="pizza-block__title">{title}</h4>
+        <Link to={`pizza/${pizza.id}`}>
+          <img className="pizza-block__image" src={imageUrl} alt="Pizza" />
+          <h4 className="pizza-block__title">{title}</h4>
+        </Link>
         <div className="pizza-block__selector">
           <ul>
             {types.map((item) => (

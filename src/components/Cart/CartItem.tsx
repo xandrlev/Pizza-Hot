@@ -1,6 +1,7 @@
 import { FaPlus, FaMinus, FaTimes } from "react-icons/fa";
 import { useAppSelector } from "../../hooks/useAppSelector";
 import { useActions } from "../../hooks/useActions";
+import clsx from "clsx";
 
 export const CartItem = () => {
   const { removePizza, addPizza, minusPizza } = useActions();
@@ -13,15 +14,21 @@ export const CartItem = () => {
       </div>
       <div className="cart__item-info">
         <h3>{item.title}</h3>
-        <p>{item.type}, {item.sizes} sm</p>
+        <p>
+          {item.type}, {item.sizes} sm
+        </p>
       </div>
       <div className="cart__item-count">
-        <div
+        <button
+          disabled={item.count === 1}
           onClick={() => minusPizza(item.id)}
-          className="button button--outline button--circle cart__item-count-minus"
+          className={clsx(
+            "button button--outline button--circle cart__item-count-minus",
+            { "cart__item-count-minus--disabled": item.count === 1 }
+          )}
         >
           <FaMinus />
-        </div>
+        </button>
         <b>{item.count}</b>
         <div
           onClick={() => addPizza(item)}

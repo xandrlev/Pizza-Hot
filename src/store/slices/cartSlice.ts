@@ -1,7 +1,9 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
+import { getFromLocalStorage } from "../../utils/getLocalStorage";
+import { calcTotalPrice } from "../../utils/calcTotalPrice";
 
 export interface PizzaCartItem {
-  id: number;
+  id: string;
   title: string;
   price: number;
   imageUrl: string;
@@ -10,9 +12,11 @@ export interface PizzaCartItem {
   count: number;
 }
 
+const { pizzas, totalPrice } = getFromLocalStorage();
+
 const initialState = {
-  totalPrice: 0,
-  itemsPizzas: [] as PizzaCartItem[],
+  totalPrice: totalPrice,
+  itemsPizzas: pizzas as PizzaCartItem[],
 };
 
 export const cartSlice = createSlice({
@@ -28,21 +32,13 @@ export const cartSlice = createSlice({
         state.itemsPizzas.push({ ...payload, count: 1 });
       }
 
-      state.totalPrice = state.itemsPizzas.reduce(
-        (sum, curr) => sum + curr.price * curr.count,
-        0
-      );
+      state.totalPrice = calcTotalPrice(state.itemsPizzas);
     },
-    minusPizza: (state, { payload }) => {
+    minusPizza: (state, { payload }: PayloadAction<string>) => {
       const findItem = state.itemsPizzas.find((item) => item.id === payload);
       if (findItem) {
         findItem.count--;
         state.totalPrice = state.totalPrice - findItem.price;
-      }
-      if (findItem!.count < 1) {
-        state.itemsPizzas = state.itemsPizzas.filter(
-          (item) => item !== findItem
-        );
       }
     },
     removePizza: (state, { payload }: PayloadAction<PizzaCartItem>) => {

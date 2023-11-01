@@ -122,109 +122,11 @@ body {
     display: block;
   }
 
-  //! old css
-  // &__item {
-  //   display: flex;
-  //   width: 100%;
-  //   border-top: 1px solid $gray-line;
-  //   padding-top: 30px;
-  //   margin-top: 30px;
-
-  //   &-img {
-  //     display: flex;
-  //     align-items: center;
-  //     margin-right: 15px;
-  //     width: 10%;
-
-  //     img {
-  //       width: 80px;
-  //       height: 80px;
-  //     }
-  //   }
-
-  //   &-info {
-  //     display: flex;
-  //     flex-direction: column;
-  //     justify-content: center;
-  //     width: 40%;
-
-  //     h3 {
-  //       font-weight: bold;
-  //       font-size: 22px;
-  //       line-height: 27px;
-  //       letter-spacing: 0.01em;
-  //     }
-
-  //     p {
-  //       font-size: 18px;
-  //       color: #8d8d8d;
-  //     }
-  //   }
-
-  //   &-count {
-  //     display: flex;
-  //     gap: 10%;
-  //     align-items: center;
-  //     justify-content: space-between;
-  //     width: 13%;
-  //     margin: 0 10px;
-
-  //     b {
-  //       font-size: 22px;
-  //     }
-  //   }
-
-  //   &-price {
-  //     display: flex;
-  //     align-items: center;
-  //     justify-content: center;
-  //     width: 33%;
-
-  //     b {
-  //       font-weight: bold;
-  //       font-size: 22px;
-  //       letter-spacing: 0.01em;
-  //     }
-  //   }
-
-  //   &-remove {
-  //     display: flex;
-  //     align-items: center;
-  //     justify-content: center;
-  //     width: 4%;
-
-  //     .button {
-  //       border-color: darken($color: $gray-line, $amount: 10);
-  //     }
-
-  //     svg {
-  //       path {
-  //         fill: darken($color: $gray-line, $amount: 15);
-  //       }
-  //     }
-
-  //     .button {
-  //       svg {
-  //         width: 11.5px;
-  //         height: 11.5px;
-  //         position: relative;
-  //       }
-  //       &:hover,
-  //       &:active {
-  //         border-color: darken($color: $gray-line, $amount: 80);
-  //         background-color: darken($color: $gray-line, $amount: 80);
-  //       }
-  //     }
-  //   }
-  // }
-
-  //* mew css
   &__item {
     display: grid;
     grid-template-columns: 80px 40% auto auto auto;
     column-gap: 2%;
     align-items: center;
-    // justify-content: space-between;
     margin: 25px 0 0;
     grid-template-areas: "image info count price del";
 
@@ -276,6 +178,27 @@ body {
       justify-content: center;
       gap: 10px;
       grid-area: count;
+
+      &-minus--disabled {
+        border-color: darken($color: $gray-line, $amount: 10);
+        opacity: 0.7;
+
+        &:active {
+          transform: none;
+        }
+
+        &:hover {
+          background-color: transparent;
+          cursor: default;
+          svg path {
+            fill: darken($color: $gray-line, $amount: 10);
+          }
+        }
+
+        svg path {
+          fill: darken($color: $gray-line, $amount: 10);
+        }
+      }
 
       b {
         font-weight: bold;

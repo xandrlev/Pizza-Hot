@@ -1,11 +1,24 @@
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import logo from "../../assets/image/logo.png";
 import { LuShoppingCart } from "react-icons/lu";
 import { Search } from "../Search/Search";
 import { useAppSelector } from "../../hooks/useAppSelector";
+import { useEffect, useRef } from "react";
 
 export const Header = () => {
   const { itemsPizzas, totalPrice } = useAppSelector((state) => state.cart);
+  const totalPizzas = itemsPizzas.reduce((sum, cur) => sum + cur.count, 0);
+  const location = useLocation();
+  const isMounted = useRef(false);
+
+  useEffect(() => {
+    if (isMounted.current) {
+      const json = JSON.stringify(itemsPizzas);
+      localStorage.setItem("cart", json);
+    }
+    isMounted.current = true;
+  }, [itemsPizzas]);
+
   return (
     <header className="header">
       <div className="container">
@@ -16,13 +29,13 @@ export const Header = () => {
             <p>delicious pizza</p>
           </div>
         </Link>
-        <Search />
+        {location.pathname !== "/cart" && <Search />}
         <div className="header__cart">
           <Link to="/cart" className="button button--cart">
             <span>{totalPrice} $</span>
             <div className="button__delimiter"></div>
             <LuShoppingCart />
-            <span>{itemsPizzas.reduce((sum, cur) => sum + cur.count, 0)}</span>
+            <span>{totalPizzas}</span>
           </Link>
         </div>
       </div>

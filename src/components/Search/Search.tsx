@@ -1,21 +1,22 @@
+import { FC } from "react";
 import { useRef } from "react";
-import { useContext } from "react";
 import { HiSearch, HiX } from "react-icons/hi";
-import { SearchContext } from "../../App";
 import styles from "./Search.module.scss";
+import { useAppSelector } from "../../hooks/useAppSelector";
+import { useActions } from "../../hooks/useActions";
 
-export const Search = () => {
-  const { searchValue, setSearchValue } = useContext(SearchContext);
-  const inputRef = useRef<HTMLInputElement>(null!);
+export const Search: FC = () => {
+  const { searchValue } = useAppSelector((state) => state.filter);
+  const { setSearchValue } = useActions();
+  const inputRef = useRef<HTMLInputElement>(null);
 
-  
-  const onSearch = ({ currentTarget }: React.FormEvent<HTMLInputElement>) => {
-    setSearchValue!(currentTarget.value);
+  const onSearch = ({ currentTarget }: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchValue(currentTarget.value);
   };
 
   const clearInput = () => {
-    setSearchValue!("");
-    inputRef.current.focus();
+    setSearchValue("");
+    inputRef.current?.focus();
   };
 
   return (

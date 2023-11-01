@@ -1,78 +1,41 @@
-import { useEffect, useRef, useState } from "react";
 import qs from "qs";
+import { FC, useCallback, useEffect, useRef } from "react";
 import { useDebounce } from "../hooks/debounce";
 import { Categories } from "../components/Categories/Categories";
 import { PizzaCard } from "../components/PizzaCard/PizzaCard";
 import { Sort, SortItem, menu } from "../components/Sort/Sort";
 import { PizzaSkeleton } from "../components/PizzaCard/PizzaSkeleton";
 import { Pagination } from "../components/Pagination/Pagination";
-import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useAppSelector } from "../hooks/useAppSelector";
 import { useActions } from "../hooks/useActions";
-import { fetchPizza } from "../store/slices/pizzaSlice";
 
-export interface HomeProps {
-  searchValue: string;
-}
-
-export const Home = ({ searchValue }: HomeProps) => {
-  const BASE_URL = "https://651ec03244a3a8aa4768f0df.mockapi.io/pizzas";
-
-  const debounceSearch = useDebounce(searchValue);
-  const [isLoading, setIsLoading] = useState(true);
+export const Home: FC = () => {
   const isSearch = useRef(false); //запрос по URL
   const isMounted = useRef(false); //проверка первого рендера один раз, а не два
   const navigate = useNavigate();
+  const location = useLocation();
 
   const {
-    loadPizza,
     setFilters,
     categoriesFilter,
     categoriesSort,
     setCurrentPage,
+    fetchPizza,
   } = useActions();
-  const { categoriesName, categoryId, currentPage, sort } = useAppSelector(
-    (state) => state.filter
-  );
-  const { pizzas } = useAppSelector((state) => state.pizza);
+  const { categoriesName, categoryId, currentPage, sort, searchValue } =
+    useAppSelector((state) => state.filter);
+  const { pizzas, status } = useAppSelector((state) => state.pizza);
+  const debounceSearch = useDebounce(searchValue);
 
   const fetchData = async () => {
-    try {
-      // fetchPizza(currentPage, categoryId, sort, debounceSearch);
-      const { data } = await axios.get(
-        `${BASE_URL}?page=${currentPage}&limit=4&${
-          categoryId > 0 ? `category=${categoryId}` : ""
-        }&sortBy=${sort.sort}&search=${debounceSearch}`
-      );
-      loadPizza(data);
-      setIsLoading(false);
-    } catch (error: any) {
-      console.log(error);
-    }
+    fetchPizza({ currentPage, categoryId, sort, debounceSearch });
   };
 
   useEffect(() => {
-    if (!isSearch.current) {
-      setIsLoading(true);
-      fetchData();
-    }
+    if (!isSearch.current) fetchData();
     isSearch.current = false;
   }, [categoryId, sort.sort, currentPage, debounceSearch]);
-
-  //* загрузка по готовой ссылке
-  useEffect(() => {
-    if (window.location.search) {
-      const params = qs.parse(window.location.search.substring(1));
-      const sort = menu.find((item) => item.sort === params.sort);
-
-      setFilters({
-        ...params,
-        sort,
-      });
-    }
-    isSearch.current = true;
-  }, []);
 
   //* получение ссылки
   useEffect(() => {
@@ -88,13 +51,27 @@ export const Home = ({ searchValue }: HomeProps) => {
     isMounted.current = true;
   }, [categoryId, sort.sort, currentPage]);
 
-  const onClickCategories = (id: number) => {
-    categoriesFilter(id);
-  };
+  //* загрузка по готовой ссылке
+  useEffect(() => {
+    if (location.search) {
+      const params = qs.parse(location.search.substring(1));
+      const sort = menu.find((item) => item.sort === params.sort);
 
-  const onClickSort = (sort: SortItem) => {
+      setFilters({
+        ...params,
+        sort,
+      });
+    }
+    isSearch.current = true;
+  }, []);
+
+  const onClickCategories = useCallback((id: number) => {
+    categoriesFilter(id);
+  }, []);
+
+  const onClickSort = useCallback((sort: SortItem) => {
     categoriesSort(sort);
-  };
+  }, []);
 
   const onChangeCurrentPage = (page: number) => {
     setCurrentPage(page);
@@ -112,7 +89,7 @@ export const Home = ({ searchValue }: HomeProps) => {
       </div>
       <h2 className="content__title">All pizzas</h2>
       <div className="content__items">
-        {isLoading
+        {status === "loading"
           ? pizzas.map((_, i) => <PizzaSkeleton key={i} />)
           : pizzas.map((pizza) => <PizzaCard key={pizza.id} {...pizza} />)}
 

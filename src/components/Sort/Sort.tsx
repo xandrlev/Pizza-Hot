@@ -1,22 +1,23 @@
+import { FC, memo } from "react";
 import { useEffect, useRef, useState } from "react";
 import { AiFillCaretDown, AiFillCaretUp } from "react-icons/ai";
 
 export interface SortItem {
-  name: string;
-  sort: string;
+  name: "popularity" | "price" | "alphabetizing";
+  sort: "rating" | "price" | "title";
 }
 
 export interface SortProps {
   sortValue: SortItem;
   onClickSort: (sort: SortItem) => void;
 }
-export const menu = [
+export const menu: SortItem[] = [
   { name: "popularity", sort: "rating" },
   { name: "price", sort: "price" },
   { name: "alphabetizing", sort: "title" },
 ];
 
-export const Sort = ({ sortValue, onClickSort }: SortProps) => {
+export const Sort: FC<SortProps> = memo(({ sortValue, onClickSort }) => {
   const [isVisible, setIsVisible] = useState(false);
   const sortRef = useRef<HTMLDivElement>(null!);
 
@@ -25,7 +26,6 @@ export const Sort = ({ sortValue, onClickSort }: SortProps) => {
     setIsVisible(false);
   };
 
-  //* закрытие попапа по клику вне
   useEffect(() => {
     const handleClick = (e: MouseEvent) => {
       if (!e.composedPath().includes(sortRef.current)) {
@@ -36,7 +36,6 @@ export const Sort = ({ sortValue, onClickSort }: SortProps) => {
     return () => document.removeEventListener("click", handleClick);
   }, []);
 
-  //* закрытие попа по esc
   useEffect(() => {
     const closeByEsc = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
@@ -72,4 +71,4 @@ export const Sort = ({ sortValue, onClickSort }: SortProps) => {
       )}
     </div>
   );
-};
+});
