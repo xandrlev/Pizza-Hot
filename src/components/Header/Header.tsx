@@ -1,4 +1,4 @@
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useParams } from "react-router-dom";
 import logo from "../../assets/image/logo.png";
 import { LuShoppingCart } from "react-icons/lu";
 import { Search } from "../Search/Search";
@@ -9,6 +9,7 @@ export const Header = () => {
   const { itemsPizzas, totalPrice } = useAppSelector((state) => state.cart);
   const totalPizzas = itemsPizzas.reduce((sum, cur) => sum + cur.count, 0);
   const location = useLocation();
+
   const isMounted = useRef(false);
 
   useEffect(() => {
@@ -29,7 +30,11 @@ export const Header = () => {
             <p>delicious pizza</p>
           </div>
         </Link>
-        {location.pathname !== "/cart" && <Search />}
+        {location.pathname === `/` && (
+          <div className="header__search">
+            <Search />
+          </div>
+        )}
         <div className="header__cart">
           <Link to="/cart" className="button button--cart">
             <span>{totalPrice} $</span>

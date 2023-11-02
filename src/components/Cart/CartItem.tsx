@@ -1,6 +1,7 @@
 import { FaPlus, FaMinus, FaTimes } from "react-icons/fa";
 import { useAppSelector } from "../../hooks/useAppSelector";
 import { useActions } from "../../hooks/useActions";
+import { Link } from "react-router-dom";
 import clsx from "clsx";
 
 export const CartItem = () => {
@@ -9,9 +10,12 @@ export const CartItem = () => {
 
   return itemsPizzas.map((item) => (
     <div key={item.title} className="cart__item">
-      <div className="cart__item-img">
-        <img className="pizza-block__image" src={item.imageUrl} alt="Pizza" />
-      </div>
+      <Link to={`/pizza/${item.id}`}>
+        <div className="cart__item-img">
+          <img className="pizza-block__image" src={item.imageUrl} alt="Pizza" />
+        </div>
+      </Link>
+
       <div className="cart__item-info">
         <h3>{item.title}</h3>
         <p>

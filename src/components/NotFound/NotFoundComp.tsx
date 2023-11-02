@@ -1,8 +1,10 @@
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import notFoundImg from "../../assets/image/404.png";
 import styles from "./NotFound.module.scss";
 
 export const NotFoundComp = () => {
+const navigate = useNavigate();
+
   return (
     <div className={styles.container}>
       <div className={styles.notFound}>
@@ -11,7 +13,7 @@ export const NotFoundComp = () => {
         <span className={styles.four}>4</span>
       </div>
       <h2>PAGE NOT FOUND</h2>
-      <Link to="/" className="button button--cart">Back to home</Link>
+      <button onClick={() => navigate(-1)} className="button button--cart">Go back</button>
     </div>
   );
 };
