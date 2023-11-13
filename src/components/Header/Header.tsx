@@ -1,4 +1,4 @@
-import { Link, useLocation, useParams } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import logo from "../../assets/image/logo.png";
 import { LuShoppingCart } from "react-icons/lu";
 import { Search } from "../Search/Search";

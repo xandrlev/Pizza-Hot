@@ -16,6 +16,9 @@ export const Pizza = () => {
   const { itemsPizzas } = useAppSelector((state) => state.cart);
   const pizzaCount = itemsPizzas.find((item) => item.id === id);
 
+  const [activeType, setActiveType] = useState(0);
+  const [activeSize, setActiveSize] = useState(0);
+
   const fetchData = async () => {
     try {
       const { data } = await axios.get<Pizzas>(
@@ -31,42 +34,58 @@ export const Pizza = () => {
     fetchData();
   }, []);
 
+  const onClickAddPizza = () => {
+    addPizza({
+      ...pizza,
+      type: typesName[activeType],
+      sizes: pizza.sizes[activeSize],
+      count: 0,
+    });
+  };
+
   return (
     <div className={styles.grid}>
       <img src={pizza.imageUrl} alt={pizza.title} />
-
       <div className={styles.right}>
         <div className={styles.right__title}>{pizza.title}</div>
         <div className={styles.desc}>
           <div className={styles.desc__item}>
-            <div className={styles.desc__item_prop}>size:</div>
-            {pizza.sizes &&
-              pizza.sizes
-                .join(" / ")
-                .split("  ")
-                .map((item, i) => (
-                  <div key={i} className={styles.desc__item_value}>
-                    {item} sm{" "}
-                  </div>
-                ))}
-          </div>
-          <div className={styles.desc__item}>
-            <div className={styles.desc__item_prop}>dough:</div>
             {pizza.types &&
               pizza.types.map((item, i) => (
-                <div key={i} className={styles.desc__item_value}>
+                <div
+                  key={i}
+                  onClick={() => setActiveType(item)}
+                  className={
+                    activeType === item
+                      ? styles.desc__item_active
+                      : styles.desc__item_value
+                  }
+                >
                   {typesName[+item]}
                 </div>
               ))}
           </div>
           <div className={styles.desc__item}>
-            <div className={styles.desc__item_prop}>price:</div>
-            <div className={styles.desc__item_value}>{pizza.price} $</div>
+            {pizza.sizes &&
+              pizza.sizes.map((item, i) => (
+                <div
+                  key={i}
+                  onClick={() => setActiveSize(i)}
+                  className={
+                    activeSize === i
+                      ? styles.desc__item_active
+                      : styles.desc__item_value
+                  }
+                >
+                  {item} sm{" "}
+                </div>
+              ))}
           </div>
         </div>
       </div>
+      <div className={styles.price}>{pizza.price} $</div>
 
-      <div className={styles.add} onClick={() => addPizza(pizza)}>
+      <div className={styles.add} onClick={onClickAddPizza}>
         <FaPlus />
         <span>Add</span>
         {pizzaCount && <i>{pizzaCount.count}</i>}

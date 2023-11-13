@@ -1,9 +1,9 @@
 import { FC } from "react";
 import { useRef } from "react";
 import { HiSearch, HiX } from "react-icons/hi";
-import styles from "./Search.module.scss";
 import { useAppSelector } from "../../hooks/useAppSelector";
 import { useActions } from "../../hooks/useActions";
+import styles from "./Search.module.scss";
 
 export const Search: FC = () => {
   const { searchValue } = useAppSelector((state) => state.filter);

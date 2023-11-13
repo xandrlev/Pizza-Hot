@@ -3,8 +3,8 @@ import { Header } from "./components/Header/Header";
 import { Home } from "./pages/Home";
 import { Cart } from "./pages/Cart";
 import { NotFound } from "./pages/NotFound";
-import "./scss/app.scss";
 import { Pizza } from "./pages/Pizza";
+import "./scss/app.scss";
 
 function App() {
   return (

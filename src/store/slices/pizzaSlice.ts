@@ -31,7 +31,7 @@ export const fetchPizza = createAsyncThunk(
   "pizzas/fetchPizza",
   async ({ currentPage, categoryId, sort, debounceSearch }: FetchArgs) => {
     const { data } = await axios.get<Pizzas[]>(
-      `${BASE_URL}?page=${currentPage}&limit=4&${
+      `${BASE_URL}?page=${currentPage}&limit=8&${
         categoryId > 0 ? `category=${categoryId}` : ""
       }&sortBy=${sort.sort}&search=${debounceSearch}`
     );

@@ -6,6 +6,9 @@
 
 body {
   background-color: $background;
+  background: url(../assets/image/desk.jpg);
+  background-size: contain;
+  background-attachment: fixed;
 }
 
 .wrapper {

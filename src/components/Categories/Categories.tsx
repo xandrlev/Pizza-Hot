@@ -1,5 +1,5 @@
 import { FC, memo } from "react";
-import { useWhyDidYouUpdate } from "ahooks";
+// import { useWhyDidYouUpdate } from "ahooks";
 
 interface ICategoriesProps {
   categoryId: number;
@@ -9,7 +9,6 @@ interface ICategoriesProps {
 
 export const Categories: FC<ICategoriesProps> = memo(
   ({ categoryId, categoriesName, onClickCategories }) => {
-    
     // * hook показывает рендеры в компоненте
     // useWhyDidYouUpdate("Categories", {
     //   categoryId,
