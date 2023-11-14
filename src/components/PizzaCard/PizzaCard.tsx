@@ -16,7 +16,7 @@ export interface IPropsPizzaCard {
   types: number[];
 }
 
-const typesName = ["thin", "default"];
+const typesName = ["thin", "classic"];
 
 export const PizzaCard: FC<IPropsPizzaCard> = (pizza) => {
   const { id, title, imageUrl, price, sizes, types } = pizza;

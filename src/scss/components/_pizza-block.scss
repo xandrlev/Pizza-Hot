@@ -9,8 +9,15 @@
   text-align: center;
   margin-bottom: 65px;
 
+  a:hover {
+    img {
+      transform: translateY(5px);
+    }
+  }
+
   &__image {
     width: 260px;
+    transition: 0.2s all ease-in-out;
   }
 
   &__title {

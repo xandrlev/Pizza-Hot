@@ -2,13 +2,13 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Pizzas } from "../store/slices/pizzaSlice";
-import styles from "./Pizza.module.scss";
 import { FaPlus } from "react-icons/fa";
 import { useActions } from "../hooks/useActions";
 import { useAppSelector } from "../hooks/useAppSelector";
+import styles from "./Pizza.module.scss";
 
 export const Pizza = () => {
-  const typesName = ["thin", "default"];
+  const typesName = ["thin", "classic"];
   const { id } = useParams();
   const navigate = useNavigate();
   const [pizza, setPizza] = useState({} as Pizzas);
